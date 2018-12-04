@@ -8,6 +8,7 @@ lightgbm 试一下
 # pylint: disable = invalid-name, C0111
 import lightgbm as lgb
 import pandas as pd
+import gc
 #from sklearn.metrics import mean_squared_error
 #from sklearn.preprocessing import OneHotEncoder
 
@@ -56,8 +57,6 @@ enc = OneHotEncoder(handle_unknown='ignore')
 X_train=enc.fit(X_train)
 X_test=enc.fit(X_test)
 '''
-print("1:",len(X_train))
-print("2:",len(y_train))
 
 
 
@@ -82,8 +81,7 @@ print('Starting training...')
 # train
 gbm = lgb.train(params,
                 lgb_train,
-                num_boost_round=20,
-                early_stopping_rounds=5)
+                num_boost_round=20)
 
 print('Saving model...')
 # save model to file
@@ -95,3 +93,5 @@ y_pred = gbm.predict(X_test, num_iteration=gbm.best_iteration)
 # eval
 print(y_pred)
 #print('The rmse of prediction is:', mean_squared_error(y_test, y_pred) ** 0.5)
+
+gc.collect()
